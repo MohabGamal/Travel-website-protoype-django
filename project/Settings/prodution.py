@@ -1,8 +1,8 @@
-# for the case when i go live
+#  in case when i go live
 
 from .base import *
 
-DEBUG = False
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ['ip-address', 'www.website.com']
 
@@ -27,10 +27,10 @@ AUTH_PASSWORD_VALIDATORS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD':'',
-        'HOST':'',
-        'PORT':'',
+        'NAME': config('db_NAME'),
+        'USER': config('db_USER'),
+        'PASSWORD': config('db_PASSWORD'),
+        'HOST': config('db_HOST'),
+        'PORT': '',
     }
 }

@@ -12,12 +12,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config   # why? https://www.youtube.com/watch?v=6PSZgVBXMdo&list=PLLRM7ROnmA9FgFlqn-HHBz0LJ62qJBwSw&index=3
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_DIR = os.path.dirname(
-           os.path.dirname(
+           os.path.dirname(      #changed to this because of new Settings folder
            os.path.dirname(
            os.path.abspath(__file__))))
 
@@ -25,7 +27,7 @@ BASE_DIR = os.path.dirname(
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's@c(s^^15q4^d7a%f_v9c$p8lss$@k+fke_8(*5gjen(w#@55v'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
