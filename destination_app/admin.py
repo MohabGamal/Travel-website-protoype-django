@@ -1,3 +1,21 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Destination, DestinationGallary
+
+#admin.site.register(Destination)
+#admin.site.register(DestinationGallary)
+
+
+class DestinationGallaryAdmin(admin.StackedInline):
+    model = DestinationGallary
+ 
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    inlines = [DestinationGallaryAdmin]         # to inline two models as one and give ability to upload more than one file
+ 
+    class Meta:
+       model = Destination
+ 
+@admin.register(DestinationGallary)
+class DestinationGallaryAdmin(admin.ModelAdmin):
+    pass

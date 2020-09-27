@@ -11,6 +11,9 @@ INSTALLED_APPS+=[
     #installed apps:
     'debug_toolbar',
     "bootstrap4",
+    'django_countries',
+    'phonenumber_field',
+    'el_pagination', 
     #created apps:
     'destination_app',
 ]
@@ -20,16 +23,26 @@ MIDDLEWARE+=[
 ]
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD':'leesinvarus1',
+        'PASSWORD':config('PASSWORD'),
         'HOST':'localhost',
         'PORT':'5432',
     }
 }
+
+
+PHONENUMBER_DB_FORMAT = 'E164'      # like: +|'country code'|'telecom code'|'phone number'
+                                        #   +        2            010         22349557
+
+
+COUNTRIES_FLAG_URL = 'flags/{code}.gif'         # to show flags #check out models, base.html, static files(flags), template
+
+
 
 # debug_toolbar settings:
 
