@@ -19,8 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls',namespace='accounts')), # to create accounts following my conditions
     path('admin/', admin.site.urls),
     path('destinations/', include('destination_app.urls',namespace='destination')),
+    
+    
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

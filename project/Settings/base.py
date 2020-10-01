@@ -35,12 +35,22 @@ SECRET_KEY = config('SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
+
+    'accounts', #created app   #must be first
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     #created apps:
+    'destination_app',
+    
+    #installed apps:
+    "bootstrap4",
+    'django_countries',
+    'phonenumber_field',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     #installed middlewares:
+    'social_django.middleware.SocialAuthExceptionMiddleware',    # for scoial login
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -66,6 +78,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                #installed options:
+                'social_django.context_processors.backends',   # for scoial login
+                'social_django.context_processors.login_redirect',  # for scoial login
             ],
         },
     },
@@ -120,3 +136,59 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn') # in case i go live
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+PHONENUMBER_DB_FORMAT = 'E164'      # like: +|'country code'|'telecom code'|'phone number'
+                                        #   +        2            010         22349557
+
+
+COUNTRIES_FLAG_URL = 'flags/{code}.gif'         # to show flags #check out models, base.html, static files(flags), template
+
+
+
+
+
+# accounts app settings
+
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']  # to make you able to log in with email or username
+
+LOGIN_REDIRECT_URL = '/accounts/profile'  # redirect after log in to profile
+PASSWORD_CHANGE_FORM_REDIRECT_URL= '/registration/password_change_done' # redirect changing password to password_change_done
+
+
+
+# contact-us : to send to this gmail users feedbacks
+# and reset password page : to send confirmation link to this gmail
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='mohabgamal112233@gmail.com'
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS=config('DEBUG', cast=bool)
+EMAIL_PORT=config('EMAIL_PORT')
+
+
+
+
+
+#social login settings:         #check  https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',  #github
+    'social_core.backends.twitter.TwitterOAuth', #twitter
+    'social_core.backends.facebook.FacebookOAuth2', #facebook
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
+
+SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET =config('SOCIAL_AUTH_FACEBOOK_SECRET')
+
+
+
+
+

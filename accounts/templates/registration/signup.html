@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+
+  
+  <form method="POST">
+    {% csrf_token %}
+    {%bootstrap_form form%}
+    <input type="submit" value="signup" class="boxed-btn3 w-30" /> 
+    <p><strong>-- OR --</strong></p>
+    <a href="{% url 'social:begin' 'github' %}">signup with GitHub</a> <br>
+    <img src="https://cdn.cms-twdigitalassets.com/content/dam/developer-twitter/auth-docs/sign-in-with-twitter-link.png.img.fullhd.medium.png" width="auto" height="auto"><br>
+    <a href="{% url 'social:begin' 'facebook' %}">
+    <img class="img" src="https://scontent.fcai2-2.fna.fbcdn.net/v/t39.2365-6/17639236_1785253958471956_282550797298827264_n.png?_nc_cat=105&amp;_nc_sid=ad8a9d&amp;_nc_ohc=fUQKEh6GpnIAX_Rydas&amp;_nc_ht=scontent.fcai2-2.fna&amp;oh=81b59836a7f6a4e64de617699ebcc288&amp;oe=5F98C816" width="200" alt="">
+    </a>
+  </form>
+
+  
+  
+  
+{% endblock %}
