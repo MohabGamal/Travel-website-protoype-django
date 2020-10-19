@@ -40,8 +40,14 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
             <li class="nav-item active "><a href="{% url 'logout'%}" class="nav-link">Log out</a></li>
-            <li class="nav-item active"><a href="{% url 'accounts:profile' %}" class="nav-link">profile</a></li>
+            <li class="nav-item active"><a href="{% url 'accounts:profile' request.user %}" class="nav-link">profile</a></li>
+            {% else %}
+            <li class="nav-item active"><a href="{% url 'login'%}" class="nav-link">Login</a></li>
+            <li class="nav-item active"><a href="{% url 'accounts:signup' %}" class="nav-link">Signup</a></li>
+            {% endif %}
+            <li class="nav-item active"><a href="{% url 'blog:posts' %}" class="nav-link">Blogs</a></li>
 	          <li class="nav-item active"><a href="{% url 'destination:destinations' %}" class="nav-link">Destination</a></li>
 	          <li class="nav-item cta"><a href="{% url 'destination:destinations' %}" class="nav-link">Book Now</a></li>
 

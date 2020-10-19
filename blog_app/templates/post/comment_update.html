@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{%load static%}
+{% load bootstrap4 %}
+{%block body%}
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+          <div class="col-md-9 ftco-animate pb-5 text-center">
+            <h1 class="mb-3 bread">Edit Comment</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span>  <span>{{page_title}} <i class="ion-ios-arrow-forward"></i></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+          <section class="ftco-section ftco-no-pt ftco-no-pb">
+            <div class="comment-form-wrap pt-5 ">
+                <h3 class="mb-5 offset-1">Edit Comment</h3>
+                <form action="" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+                <div class="form-group">
+                    
+                    {% csrf_token %}
+                    {% bootstrap_form comment_update_form %}
+                    
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Post" class="btn py-3 px-4 btn-primary">
+                  </div>
+
+            </section>
+{% endblock %}

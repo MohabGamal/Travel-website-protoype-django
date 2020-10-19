@@ -11,12 +11,13 @@ class Profile(models.Model):
     user= models.OneToOneField(User, on_delete=models.CASCADE)
     cover_image=models.ImageField(upload_to='profiles/')
     city=models.CharField(max_length=100, null=False, blank=False)
-    country = CountryField(null=False , blank=False, db_index=True,   #package
+    country = CountryField(null=False , blank=False,               #package
     countries_flag_url='flags/{code}.gif')                         #to show flags #check out settings, base.html, static files(flags), template 
     phone_number=PhoneNumberField(null=False , blank=False)        #package  #check out settings
 
+    
     def __str__(self):
-        return str(self.user)
+        return self.user.username
 
 
 

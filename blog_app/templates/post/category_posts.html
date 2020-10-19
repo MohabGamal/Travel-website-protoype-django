@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{%load static%}
+{%block body%}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <h1 class="mb-3 bread"> Blogs</h1>
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>{{page_title}} <i class="ion-ios-arrow-forward"></i></span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+ <section class="ftco-section">
+    <div class="container">
+      <div class="row d-flex">
+            {% for post in category_posts %} 
+        <div class="col-md-4  ftco-animate">
+            <div class="blog-entry justify-content-end">
+            <a href="{% url 'blog:post_details' post.slug%}" class="block-20" style="background-image: url({{post.post_cover.url}});">
+            </a>
+            <div class="text mt-3 float-right d-block">
+                <div class="d-flex align-items-center mb-4 topp">
+                    <div class="one">
+                        <span class="day" style='font-size: 40px;'>{{post.published_at|date:'d'}} </span>
+                    </div>
+                    <div class="two">
+                        <span class="yr">{{post.published_at|date:'Y'}}</span>
+                        <span class="mos">{{post.published_at|date:'M'}}</span>
+                    </div>
+                </div>
+              <h3 class="heading"><a href="{% url 'blog:post_details' post.slug%}">{{post}}</a></h3>
+              <p>{{post.description|truncatewords:15}}.</p>       <!-- to show the first 15 words of description-->
+            </div>
+          </div>
+        </div>
+        </div>          
+            {% endfor %}
+        </div>
+    
+    {%if category_posts.has_other_pages%}
+
+      <div class="row mt-5mx-auto">
+        <div class="col text-center">
+          <div class="block-27">
+            <ul>
+
+              {% if category_posts.has_previous %}
+			    		    <li><a href="/blogs/category_posts/{{category.slug}}?page={{ category_posts.previous_page_number }}">&lt;</a></li>
+						  {% endif %}
+
+              {%for i in category_posts.paginator.page_range%}
+                	<li><a href="/blogs/category_posts/{{category.slug}}?page={{i}}"><span>{{i}}</span></a></li>
+						  {%endfor%}
+
+              {%if category_posts.has_next%}
+                	<li><a href="/blogs/category_posts/{{category.slug}}?page={{category_posts.next_page_number}}">&gt;</a></li>
+						  {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    
+    </div>
+  </section>
+ {% endblock %}           

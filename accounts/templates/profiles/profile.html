@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="bradcam_text">
-                        <h3>Welcome {{profile}}</h3>
+                        <h3>Welcome in {{profile}}'s profile</h3>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,10 @@
                                 <li>Email: <span>{{profile.user.email}}</span></li>     <!--email is from  django created table users not from  my created profile table-->
                                 <li>phone: <span>{{profile.phone_number}}</span></li>
                                 <li>Address: <span>{{profile.city}}</span></li>
-                                <a class="boxed-btn3 w-100"  href="{% url 'accounts:profile_edit' %}">Edit profile</a>
+                            
+                                {% ifequal profile.user request.user %} 
+                                <a class="boxed-btn3 w-100"  href="{% url 'accounts:profile_edit' request.user %}">Edit profile</a>
+                                {% endifequal %}
                             </ul>
                         </div>
                     </div>

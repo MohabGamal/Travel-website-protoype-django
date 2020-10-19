@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{%load static%}
+{% load bootstrap4 %}
+{% load martortags %}
+{%block body%}
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+          <div class="col-md-9 ftco-animate pb-5 text-center">
+            <h1 class="mb-3 bread">Blog Details</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a href="blog.html">Blog <i class="ion-ios-arrow-forward"></i></a></span> <span>{{page_title}} <i class="ion-ios-arrow-forward"></i></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+
+  <style>
+    .col-lg-8 img{
+
+        width: 100%;                  
+    }
+  </style>                         <!--to make sure that images in content are suitable for the page-->
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 order-md-last ftco-animate py-md-5 mt-md-5">
+            <h2 class="mb-3">{{post_details.title}}</h2>
+            {{post_details.content| safe_markdown}}  <!--to create a content. Using safe to don't show html code-->
+
+            {% ifequal post_details.author request.user %}        <!--if the author of the post equals the the user who opened the page-->
+            
+            <a href="{% url 'blog:post_update' post_details.slug%}" class="reply">Edit</a> <br>
+
+            <form action="{% url 'blog:post_delete' post_details.slug%}" 
+                method="POST" style="display: inline;" onsubmit="window.mytest()">
+                {% csrf_token %}                                                    <!-- Form to confirm the deletion of the post with Ajax ↓ -->
+                <input type="hidden" name="album_id"                                
+                    value="{{post_details.title}}" />
+                <button type="submit" class="btn btn-default btn-sm">
+                    <span >Delete</span>
+                </button>
+            </form> 
+          <script type="text/javascript">window.mytest = function() { var isValid = confirm('Are you sure ?');if (!isValid) { event.preventDefault(); }}</script>
+            {% endifequal %}
+
+
+            <div class="tag-widget post-tag-container mb-5 mt-5">
+              <div class="tagcloud">
+              {% for category in categories %}
+                <a href="{% url 'blog:category_posts' category.categories__slug %}" class="tag-cloud-link">{{category.categories__title}}</a>
+                                                                                                                          <!--↓-->
+                                                                             <!--must be written like this because it is many_too_many field returns with ids not titles-->            
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div class="about-author d-flex p-4 bg-light">
+              <div class="desc">
+                <h3>Author: {{post_details.author}}</h3>
+
+                {% if request.user in post_details.likes.all %} <!--unlike or like depending if the user liked or not-->
+
+                <a href= "{% url 'blog:like_or_unlike' post_details.slug %}" class="unlike">unlike</a>
+                {% else %}
+                <a href= "{% url 'blog:like_or_unlike' post_details.slug %}" class="like">like</a>
+                {% endif %}
+                <h6>likes: {{post_details.likes.count}}</h6>
+              </div>
+            </div>
+
+
+
+            <div class="pt-5 mt-5">
+              <h3 class="mb-5">{{post_details.comment_count}} Comments</h3>
+              {% for comment in post_details.get_comments %}                  <!--first loop (comments)-->
+              <ul class="comment-list">                                       <!-- ro create the first reply-->
+                <li class="comment">
+                  <div class="vcard bio">
+
+                  {% if comment.replier.cover_image %}    <!--if the user has profile pic-->
+                    <img src={{comment.replier.cover_image.url}} alt="">
+                  {% else %}
+                    <img src="{% static 'images/person_2.jpg' %}" alt="">
+                  {% endif %}
+                  </div>
+                  <div class="comment-body">
+                    <h3>{{comment.replier.user.username}}</h3>
+                    <div class="meta">{{comment.commented_at|timesince}} ago</div>
+                    <p>{{comment.content|safe_markdown}}</p>
+
+                    
+                    
+                    
+
+                    {% ifequal comment.replier.user request.user %}        <!--if the author of the comment equals the the user who opened the page then they can delete and edit-->
+                    <a href="{% url 'blog:comment_update' post_details.slug comment.id %}" class="reply">Edit</a></p>
+
+                    <form action="{% url 'blog:comment_delete' post_details.slug comment.id %}" 
+                      method="POST" style="display: inline;" onsubmit="window.mytest()">
+                      {% csrf_token %}                                                    <!-- Form to confirm the deletion of the post with Ajax ↓ -->
+                      <input type="hidden" name="album_id"                                
+                          value="{{post_details.title}}" />
+                      <button type="submit" class="btn btn-default btn-sm">
+                          <span >Delete</span>
+                      </button>
+                    </form> 
+                    <script type="text/javascript">window.mytest = function() { var isValid = confirm('Are you sure ?');if (!isValid) { event.preventDefault(); }}</script>
+                    
+                    {% else %} <!--don't show reply button to the user of request if he is the owner of the comment-->
+                    <p><a href="{% url 'blog:reply_create' post_details.slug comment.id %}" class="reply">Reply</a>
+                    {%endifequal%}
+
+
+                  </div>
+                {% for reply in replies %}          <!--second loop (replies) tp create more replies-->       
+                  {% ifequal reply.reply comment %} <!--if reply_field(the reccursive field) equals the current comment-->
+                 
+                    
+                  <ul class="children">
+                    <li class="comment">
+                      <div class="vcard bio">
+                      {% if reply.replier.cover_image %}
+                        <img src="{{reply.replier.cover_image.url}}" alt="">
+                      {% else %}
+                        <img src="{% static 'images/person_2.jpg' %}" alt="">
+                      {% endif %}
+                      </div>
+                      <div class="comment-body">
+                        <h3>{{reply.replier}}</h3>
+                        <div class="meta">{{reply.commented_at|timesince}} ago</div>
+                        <p>{{reply.content|safe_markdown|truncatechars_html:50}}</p>
+
+                    
+                    {% ifequal reply.replier.user request.user %}         <!--if the author of the comment equals the the user who opened the page then they can delete and edit-->
+                    <a href="{% url 'blog:comment_update' post_details.slug reply.id %}" class="reply">Edit</a></p>
+
+                    <form action="{% url 'blog:comment_delete' post_details.slug reply.id %}" 
+                      method="POST" style="display: inline;" onsubmit="window.mytest()">
+                      {% csrf_token %}                                                    <!-- Form to confirm the deletion of the post with Ajax ↓ -->
+                      <input type="hidden" name="album_id"                                
+                          value="{{post_details.title}}" />
+                      <button type="submit" class="btn btn-default btn-sm">
+                          <span >Delete</span>
+                      </button>
+                    </form> 
+                    <script type="text/javascript">window.mytest = function() { var isValid = confirm('Are you sure ?');if (!isValid) { event.preventDefault(); }}</script>
+                    
+                    {% else %} <!--don't show reply button to the user of request if he is the owner of the reply-->
+                    <p><a href="{% url 'blog:reply_to_reply_create' post_details.slug comment.id reply.id%}" class="reply">Reply</a>
+                               <!--the comment.id to reply to this comment--> <!--the reply.id to mention the replied-to person-->
+                    {%endifequal%}
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+
+                {% endifequal %}
+              {% endfor %}  <!-- replies for-loop ( second nested loop) --> 
+
+              </ul>
+              {% endfor %}  <!-- comments for-loop (first)--> 
+              <!-- END comment-list --> 
+
+              <div class="comment-form-wrap pt-5">
+              {% if user.is_authenticated %}
+                <h3 class="mb-5">Leave a comment</h3>
+                <form action="" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+                
+                  <div class="form-group">
+                    
+                    {% csrf_token %}
+                    {% bootstrap_form comment_form %}
+                    
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                  </div>
+                {% else %}
+                <p class="no-comments-allowed">
+			            Please <a href="{% url 'login'%}" title="Special:UserLogin">log in</a> to post a comment on this post.		</p>
+                {% endif %}
+                </form>
+              </div>
+            </div>
+          
+          </div> <!-- .col-md-8 -->
+          <div class="col-lg-4 sidebar ftco-animate bg-light py-md-5">
+            <div class="sidebar-box pt-md-5">                                 <!-- search form -->
+              <form action="{% url 'blog:posts_search' %}" class="search-form">
+                <div class="form-group">
+                  <span class="icon icon-search"></span>
+                  <input type="text" class="form-control" name="q" placeholder="Type a keyword and hit enter"> 
+                </div>
+              </form>
+            </div>
+            <div class="sidebar-box ftco-animate">
+              <div class="categories">
+                <h3>Categories</h3>
+                
+                {% for category in categories %}
+                <li><a href="{% url 'blog:category_posts' category.categories__slug %}">{{category.categories__title}} <span>({{category.qcount}})</span></a></li>
+                                                                                                      <!--↓-->
+                                                                                            <!--must be written like this because it is many_too_many field returns with ids not titles-->
+                {% endfor %}
+
+              </div>
+            </div>
+
+            <div class="sidebar-box ftco-animate">
+              <h3>Recent Blogs</h3>
+              {% for latest in latest_posts %}
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url({{latest.post_cover.url}});"></a>
+                <div class="text">
+                  <h3 class="heading"><a href="{% url 'blog:post_details' latest.slug%}">{{latest}}</a></h3>
+                  <div class="meta">
+                    <div><a href="{% url 'blog:post_details' latest.slug%}"><span class="icon-calendar"></span> {{latest.published_at|date:'d M Y'}}</a></div>
+                    <div><a href="{% url 'blog:post_details' latest.slug%}"><span class="icon-person"></span> {{latest.author}}</a></div>
+                    <div><a href="{% url 'blog:post_details' latest.slug%}"><span class="icon-chat"></span> {{latest.comment_count}}</a></div>
+                    <div><a href="{% url 'blog:post_details' latest.slug%}">{{latest.views_count}} Views</a></div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="sidebar-box ftco-animate">
+              <h3>Paragraph</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section> <!-- .section -->
+    
+    {% endblock %}

@@ -1,9 +1,8 @@
 from django.contrib import admin
-
 from .models import Destination, DestinationGallary
 
 #admin.site.register(Destination)
-#admin.site.register(DestinationGallary)
+admin.site.register(DestinationGallary)
 
 
 class DestinationGallaryAdmin(admin.StackedInline):
@@ -16,6 +15,6 @@ class DestinationAdmin(admin.ModelAdmin):
     class Meta:
        model = Destination
  
-@admin.register(DestinationGallary)
+'''@admin.register(DestinationGallary)
 class DestinationGallaryAdmin(admin.ModelAdmin):
-    pass
+    pass'''

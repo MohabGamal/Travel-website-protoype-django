@@ -36,7 +36,6 @@ class Destination(models.Model) :
     countries_flag_url='flags/{code}.gif')                         #to show flags #check out settings, base.html, static files(flags), template 
     phone_number=PhoneNumberField(null=False , blank=False)        #package  #check out settings
 
-    
 
     def save(self,*args, **kwargs):              #overriding save method in admin page
        self.slug= slugify(self.title)           #create a slug

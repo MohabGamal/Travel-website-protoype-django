@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from . form import *
 from django.contrib.auth import authenticate, login
-from . models import Profile
+from accounts.models import Profile
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -16,24 +16,24 @@ def signup(request):
             password= form.cleaned_data['password1']
             user= authenticate(username=username, password=password)
             login(request,user)
-            return redirect(reverse('accounts:profile'))
+            return redirect(reverse('destination:destinations'))
 
     else:
         form = SignupForm()
 
-
     return render(request, 'registration/signup.html',{'form':form})  
 
 
-@login_required
-def profile(request):
-    profile= Profile.objects.get(user=request.user)
+
+def profile(request,user):
+    the_user= User.objects.get(username=user)
+    profile= Profile.objects.get(user=the_user)
     return render(request, 'profiles/profile.html',{'profile': profile})
 
 
 
 @login_required
-def profile_edit(request):
+def profile_edit(request,user):
     profile= Profile.objects.get(user=request.user)
 
     if request.method=='POST':
@@ -43,7 +43,7 @@ def profile_edit(request):
             userform.save()
             myprofile= profileform.save(commit=False)
             myprofile.save()
-            return redirect(reverse('accounts:profile'))
+            return redirect(reverse('accounts:profile', args=(user,)))
 
                                       #to give the page the logged in user data 
     else:                             #↑
@@ -51,7 +51,7 @@ def profile_edit(request):
         profileform = ProfileForm(instance=profile)
 
 
-    return render(request,'profiles/profile_edit.html',{'userform': userform ,'profileform':profileform})
+    return render(request,'profiles/profile_edit.html',{'userform': userform ,'profileform':profileform, 'profile' : profile})
 
 
 

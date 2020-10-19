@@ -37,20 +37,27 @@ SECRET_KEY = config('SECRET_KEY')
 INSTALLED_APPS = [
 
     'accounts', #created app   #must be first
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
      #created apps:
     'destination_app',
+    'blog_app',
+    
     
     #installed apps:
     "bootstrap4",
     'django_countries',
     'phonenumber_field',
-    'social_django',
+    'social_django',        # to add social login
+    'martor',               # text editor
+    
+
 ]
 
 MIDDLEWARE = [
@@ -90,22 +97,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-
-
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
-
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -142,18 +133,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 PHONENUMBER_DB_FORMAT = 'E164'      # like: +|'country code'|'telecom code'|'phone number'
                                         #   +        2            010         22349557
 
-
 COUNTRIES_FLAG_URL = 'flags/{code}.gif'         # to show flags #check out models, base.html, static files(flags), template
-
-
-
 
 
 # accounts app settings
 
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']  # to make you able to log in with email or username
 
-LOGIN_REDIRECT_URL = '/accounts/profile'  # redirect after log in to profile
+LOGIN_REDIRECT_URL = '/destinations'  # redirect after log in to profile
 PASSWORD_CHANGE_FORM_REDIRECT_URL= '/registration/password_change_done' # redirect changing password to password_change_done
 
 
@@ -189,6 +176,74 @@ SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET =config('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 
+# martor text editor    https://github.com/agusmakmun/django-markdown-editor
 
+# Choices are: "semantic", "bootstrap"
+MARTOR_THEME = 'bootstrap'
+
+# Global martor settings
+# Input: string boolean, `true/false`
+MARTOR_ENABLE_CONFIGS = {
+    'emoji': 'true',        # to enable/disable emoji icons.
+    'imgur': 'true',        # to enable/disable imgur/custom uploader.
+    'mention': 'true',     # to enable/disable mention
+    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
+    'living': 'true',      # to enable/disable live updates in preview
+    'spellcheck': 'true',  # to enable/disable spellcheck in form textareas
+    'hljs': 'true',         # to enable/disable hljs highlighting in preview
+}
+
+# To show the toolbar buttons
+MARTOR_TOOLBAR_BUTTONS = [
+    'bold', 'italic', 'horizontal', 'heading', 'pre-code',
+    'blockquote', 'unordered-list', 'ordered-list',
+    'link', 'image-link', 'image-upload', 'emoji',
+    'direct-mention', 'toggle-maximize', 'help'
+]
+
+# To setup the martor editor with title label or not (default is False)
+MARTOR_ENABLE_LABEL = False
+
+# Imgur API Keys
+MARTOR_IMGUR_CLIENT_ID = config('MARTOR_IMGUR_CLIENT_ID')
+MARTOR_IMGUR_API_KEY   = config('MARTOR_IMGUR_API_KEY')
+
+# Markdownify
+MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default
+MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/' # default
+
+# Markdown extensions (default)
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.mention',      # to parse markdown mention
+    'martor.extensions.emoji',        # to parse markdown emoji
+    'martor.extensions.mdx_video',    # to parse embed/iframe video
+    'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
+]
+
+# Markdown Extensions Configs
+MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
+
+# Markdown urls
+MARTOR_UPLOAD_URL = '/martor/uploader/' # default
+MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
+
+# Markdown Extensions
+# MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
+MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
+MARTOR_MARKDOWN_BASE_MENTION_URL = '/accounts/profile/' #the martor continues with [user] in @[user]     # please change this to your domain
+
+# If you need to use your own themed "bootstrap" or "semantic ui" dependency
+# replace the values with the file in your static files dir
+MARTOR_ALTERNATIVE_JS_FILE_THEME = "semantic-themed/semantic.min.js"   # default None
+MARTOR_ALTERNATIVE_CSS_FILE_THEME = "semantic-themed/semantic.min.css" # default None
+MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "jquery/dist/jquery.min.js"        # default None
 
 

@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="apply_job_form white-bg">
-                        <h4>edit_profile</h4>
+                        <h4>edit {{profile}} profile</h4>
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {% bootstrap_form userform%}
