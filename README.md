@@ -1,7 +1,7 @@
 # Travel-website-protoype-django
 Features:
 1- Advanced blog (
-                  -posts
+                  posts
                   -post_views
                   -categories
                   -search
