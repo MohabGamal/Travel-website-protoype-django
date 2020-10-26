@@ -15,25 +15,20 @@
       <p>Please login to see this page.</p>
     {% endif %}
   {% endif %}
-  
-  <form method="post" action="{% url 'login' %}">
+  <form method="POST" action="">
     {% csrf_token %}                                <!-- copied from source code in browser to modify it to show that he can log in with Username or Email -->
     <div class="form-group"><label for="id_username">Username or Email</label><input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="Username or Email" title="" required id="id_username"></div>
     <div class="form-group"><label for="id_password">Password</label><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Password" title="" required id="id_password"></div>
-    <input type="submit" value="login" class="boxed-btn3 w-30" />
+    <input type="submit" value="login" class="boxed-btn3 w-30" /> 
     <input type="hidden" name="next" value="{{ next }}" />
     {# Assumes you setup the password_reset view in your URLconf #}
   <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
   <p><strong>-- OR --</strong></p>
-    <a href="{% url 'social:begin' 'github' %}">login with GitHub</a><br>
+    <a href="{% url 'social:begin' 'github' %}" >login with GitHub</a> <br>
     <img src="https://cdn.cms-twdigitalassets.com/content/dam/developer-twitter/auth-docs/sign-in-with-twitter-link.png.img.fullhd.medium.png" width="auto" height="auto"><br>
     <a href="{% url 'social:begin' 'facebook' %}">
     <img class="img" src="https://scontent.fcai2-2.fna.fbcdn.net/v/t39.2365-6/17639236_1785253958471956_282550797298827264_n.png?_nc_cat=105&amp;_nc_sid=ad8a9d&amp;_nc_ohc=fUQKEh6GpnIAX_Rydas&amp;_nc_ht=scontent.fcai2-2.fna&amp;oh=81b59836a7f6a4e64de617699ebcc288&amp;oe=5F98C816" width="200" alt="">
     </a>
   </form>
 
-  
-  
-  
-  
 {% endblock %}

@@ -14,8 +14,6 @@ class EmailBackend(ModelBackend):   # to make you able to log in with email or u
         except User.DoesNotExist:
             return None
 
-
-
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user

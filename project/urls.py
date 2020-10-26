@@ -23,12 +23,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls',namespace='accounts')), # to create accounts following my conditions
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('destinations/', include('destination_app.urls',namespace='destination')),
     path('blogs/', include('blog_app.urls',namespace='blog')),
     path('martor/', include('martor.urls')),                    # text editor 
     path('oauth/', include('social_django.urls', namespace='social')), # for social login
-    
+    path('ratings/', include('star_ratings.urls', namespace='ratings')), # stars rating
+    path('chat/', include('chat.urls')),
 ]
 
 

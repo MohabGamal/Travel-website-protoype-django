@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {%load static%}
+{%load custom_tags%}
 {%block body%}
 
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({% static 'images/bg_1.jpg' %});" data-stellar-background-ratio="0.5">
@@ -51,15 +52,15 @@
             <ul>
 
               {% if posts.has_previous %}
-			    		    <li><a href="/blogs?page={{ posts.previous_page_number }}">&lt;</a></li>
+			    		    <li><a href="{% relative_url posts.previous_page_number 'page' request.GET.urlencode %}">&lt;</a></li>
 						  {% endif %}
 
               {%for i in posts.paginator.page_range%}
-                	<li><a href="/blogs?page={{i}}"><span>{{i}}</span></a></li>
+                	<li><a href="{% relative_url i 'page' request.GET.urlencode %}"><span>{{i}}</span></a></li>
 						  {%endfor%}
 
               {%if posts.has_next%}
-                	<li><a href="/blogs?page={{posts.next_page_number}}">&gt;</a></li>
+                	<li><a href="{% relative_url posts.next_page_number 'page' request.GET.urlencode %}">&gt;</a></li>
 						  {% endif %}
 
             </ul>

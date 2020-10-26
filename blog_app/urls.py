@@ -1,6 +1,4 @@
-from os import name
-from blog_app.views import search_view
-from django.urls import include , path
+from django.urls import path
 from . import views
 
 
@@ -9,9 +7,8 @@ app_name='blog_app'
 
 
 urlpatterns = [
-    path('', views.PostsView, name='posts'),
+    path('', views.posts, name='posts'),
     path('post/create/', views.create_post, name='post_create'),
-    path('post/search/', views.search_view, name='posts_search'),
     path('category_posts/<str:slug>', views.category_posts, name='category_posts'),
     path('<str:slug>/', views.PostsDetailsView, name='post_details'),
     path('<str:slug>/update', views.post_update, name='post_update'),

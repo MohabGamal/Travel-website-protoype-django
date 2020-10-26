@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from martor.models import MartorField 
-from django.db.models import Count
 
 
 
@@ -29,7 +28,7 @@ class Post(models.Model):
 
 
     @property
-    def get_comments(self):                  # property to relate between post and comments so comments appear only in post page and i can call get_comments as a field in Post. Also, if i delete post i delete its comments. Must also give related_name in comment class
+    def get_comments(self):                  # property to relate between post and comments so comments appear only in post page and I can call get_comments as a field in Post. Also, Must also give related_name in comment class
         
         return self.comments.filter(reply__isnull=True,).order_by('-commented_at')        #for more https://stackoverflow.com/questions/58558989/what-does-djangos-property-do
                                     # filter the comments only not replies

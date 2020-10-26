@@ -1,8 +1,10 @@
 {%extends "base.html"%}
 {%load static%}
-{% load bootstrap4 %}
 {% load countries %}
+{% load bootstrap4 %}
+{% load custom_tags %}
 {%block body%}
+
 
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url({%static 'images/bg_1.jpg'%});" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -26,7 +28,7 @@
 		{% for top_country in top_countries %}
         	<div class="col-md-3 ftco-animate">
         		<div class="project-destination">
-        			<a href="#" class="img" style="background-image: url({%static "images/destination-9.JPG"%});">
+        			<a href="#" class="img" style="background-image: url({% static 'images/destination-9.JPG' %});">
         				<div class="text">
 						{% get_countries as countries %}
 							{% for country in countries %}						<!--loop in countries till u find our country code then give us its name-->
@@ -54,58 +56,46 @@
 
 					<div class="col-md-12 mb-5">
 						<div class="search-wrap-1 search-wrap-notop ftco-animate p-4">
-							<form action="#" class="search-property-1">
+							<form action="" method= "GET" class="search-property-1">
 		        		<div class="row">
 		        			<div class="col-lg align-items-end">
 		        				<div class="form-group">
-		        					<label for="#">Destination</label>
+		        					<label for="id_description">Destination</label>
 		          				<div class="form-field">
 		          					<div class="icon"><span class="ion-ios-search"></span></div>
-				                <input type="text" class="form-control" placeholder="Search place">
+				                <input type="text" name="description"  class="form-control" placeholder="Search place"> <!-- add name="" for input to run the filter -->
 				              </div>
 			              </div>
 		        			</div>
+
+		        			<div class="col-lg align-items-end">
+		        				<div class="form-group is-valid">
+		        					<label for="id_check_in_date_0">Check-in-date from</label>
+		        					<div class="form-group is-valid">
+		          					<div class="icon"><span class="ion-ios-calendar"></span></div>
+								  <input type="text" name="check_in_date_after"  class="form-control checkin_date" placeholder="Check in date from" title="" id="id_check_in_date_0"/> 
+							  </div>
+			              </div>											<!-- check in duration-->
+		        			</div>
 		        			<div class="col-lg align-items-end">
 		        				<div class="form-group">
-		        					<label for="#">Check-in date</label>
+		        					<label for="id_check_in_date_0">Check-in-date to</label>
 		        					<div class="form-field">
 		          					<div class="icon"><span class="ion-ios-calendar"></span></div>
-				                <input type="text" class="form-control checkin_date" placeholder="Check In Date">
+				                <input type="text" name="check_in_date_before"  id="id_check_in_date_1" class="form-control checkin_date" placeholder="Check in Date to">
 				              </div>
 			              </div>
 		        			</div>
-		        			<div class="col-lg align-items-end">
+
+
+							<div class="col-lg align-items-end">
 		        				<div class="form-group">
-		        					<label for="#">Check-out date</label>
-		        					<div class="form-field">
-		          					<div class="icon"><span class="ion-ios-calendar"></span></div>
-				                <input type="text" class="form-control checkout_date" placeholder="Check Out Date">
-				              </div>
-			              </div>
-		        			</div>
-		        			<div class="col-lg align-items-end">
-		        				<div class="form-group">
-		        					<label for="#">Price Limit</label>
-		        					<div class="form-field">
-		          					<div class="select-wrap">
-		                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                      <select name="" id="" class="form-control">
-		                        <option value="">$5,000</option>
-		                        <option value="">$10,000</option>
-		                        <option value="">$50,000</option>
-		                        <option value="">$100,000</option>
-		                        <option value="">$200,000</option>
-		                        <option value="">$300,000</option>
-		                        <option value="">$400,000</option>
-		                        <option value="">$500,000</option>
-		                        <option value="">$600,000</option>
-		                        <option value="">$700,000</option>
-		                        <option value="">$800,000</option>
-		                        <option value="">$900,000</option>
-		                        <option value="">$1,000,000</option>
-		                        <option value="">$2,000,000</option>
-		                      </select>
-		                    </div>
+		        					<label for="id_price_0">Price Range</label>
+		          				<div class="form-field">
+		          					<div class="icon"><span class="ion-ios-search"></span></div>
+				                <input type="text" name="price_min"  class="form-control" placeholder="Minimum Price" title="" id="id_price_0">
+							
+				                <input type="text" name="price_max"  class="form-control"  placeholder="Maximaum Price" title="" id="id_price_1">
 				              </div>
 			              </div>
 		        			</div>
@@ -124,8 +114,6 @@
 	    </div>
     </section>
 
-	
-
     <section class="ftco-section ftco-no-pt">
     	<div class="container">
     		<div class="row justify-content-center pb-4">
@@ -142,7 +130,7 @@
 						<div class="text p-4">
 							<span class="price">${{destination.price}}/person</span>
 							<span class="days">{{destination.duration}} Days Tour</span>
-							<h3><a href="#">{{destination.title}}</a></h3>
+							<h3><a href="{% url 'destination:destination_details' destination.slug%}">{{destination.title}}</a></h3>
 
 
 							{% get_countries as countries %}
@@ -177,34 +165,28 @@
 			{% endfor %}	
 			</div>		
 		
-
-
-
         
 		 {%if destinations.has_other_pages%}
 
 		<div class="row mt-5 mx-auto">
           <div class="col text-center ">
             	<div class="block-27 ">
-					  
 					<ul>
 						{% if destinations.has_previous %}
-			    		<li><a href="/destinations?page={{ destinations.previous_page_number }}">&lt;</a></li>
+			    		<li><a href="{% relative_url destinations.previous_page_number 'page' request.GET.urlencode %}">&lt;</a></li>
 						{% endif %}
 
 						
                 		 {%for i in destinations.paginator.page_range%}
-                		 <li><a href="/destinations?page={{i}}"><span>{{i}}</span></a></li>
+						 			<!--coustm tag to get the current url of the page to paginate filtered results-->	
+						 <li><a href="{% relative_url i 'page' request.GET.urlencode %}"><span>{{i}}</span></a></li>
 						 {%endfor%}
 						
 
                 		{%if destinations.has_next%}
-                		<li><a href="/destinations?page={{destinations.next_page_number}}">&gt;</a></li>
+                		<li><a href="{% relative_url destinations.next_page_number 'page' request.GET.urlencode %}">&gt;</a></li>
 						{% endif %}
               		</ul>
-
-
-				
           		</div>
             </div>
     	</div>

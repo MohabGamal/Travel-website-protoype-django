@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Destination, DestinationGallary
+from .models import Destination, DestinationGallary, Booking
 
 #admin.site.register(Destination)
 admin.site.register(DestinationGallary)
-
+admin.site.register(Booking)
 
 class DestinationGallaryAdmin(admin.StackedInline):
     model = DestinationGallary

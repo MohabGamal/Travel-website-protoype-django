@@ -19,14 +19,18 @@ class PostsView(ListView):
 '''
 
 
-def PostsView(request):
-    posts=Post.objects.all()
-    page_title="Posts"
+def posts(request):
+    posts = Post.objects.all()
+    query = request.GET.get('q')                #the search text form <input name="" />HTML
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |             # filter with containing in title, description or content 
+            Q(description__icontains=query) |       # contains vs icontains where i stands for insensitive
+            Q(content__icontains=query)
+        ).distinct()                                # don't repeat the results
 
     p = Paginator(posts, 2)#num of items per page
     page_number = request.GET.get('page')
-    #page_obj = p.get_page(page_number)
-
     try:
         page_obj = p.page(page_number)
     except PageNotAnInteger:
@@ -34,12 +38,11 @@ def PostsView(request):
     except EmptyPage:
         page_obj = p.page(p.num_pages)        #if page is empty get the last page
 
-
     context={
-        'page_title' : page_title,
-        'posts' : page_obj,
-        }
-
+        'posts'         : page_obj,
+        "query"         : query,
+              
+    }
     return  render(request, 'post/posts.html',context)
 
 
@@ -216,34 +219,6 @@ def reply_to_reply_create(request, slug, id, pk):   #create the nested replies
         'page_title'        :page_title,
         }
     return  render(request, 'post/reply_create.html',context)
-
-
-def search_view(request):
-    search = Post.objects.all()
-    page_title=" Blog Search Results"
-    query = request.GET.get('q')                #the search text
-    if query:
-        search = search.filter(
-            Q(title__icontains=query) |             # filter with containing in title, description or content 
-            Q(description__icontains=query) |
-            Q(content__icontains=query)
-        ).distinct()                                # don't repeat the results
-
-    p = Paginator(search, 1)#num of items per page
-    page_number = request.GET.get('page')
-    try:
-        page_obj = p.page(page_number)
-    except PageNotAnInteger:
-        page_obj = p.page(1)                  #if page number is not intger get the first page
-    except EmptyPage:
-        page_obj = p.page(p.num_pages)        #if page is empty get the last page
-
-    context={
-        'search_results': page_obj,
-        "query"         : query,
-        'page_title'    : page_title,                   
-    }
-    return  render(request, 'post/posts_search.html',context)
 
 
 @login_required

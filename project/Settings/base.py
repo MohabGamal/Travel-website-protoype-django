@@ -48,6 +48,7 @@ INSTALLED_APPS = [
      #created apps:
     'destination_app',
     'blog_app',
+    'chat',
     
     
     #installed apps:
@@ -56,7 +57,9 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'social_django',        # to add social login
     'martor',               # text editor
-    
+    'star_ratings',         # check out   https://github.com/wildfish/django-star-ratings
+    'django_filters',
+    'channels',
 
 ]
 
@@ -96,6 +99,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+ASGI_APPLICATION = 'project.routing.application' #for chat app
 
 LANGUAGE_CODE = 'en-us'
 
@@ -140,7 +144,7 @@ COUNTRIES_FLAG_URL = 'flags/{code}.gif'         # to show flags #check out model
 
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']  # to make you able to log in with email or username
 
-LOGIN_REDIRECT_URL = '/destinations'  # redirect after log in to profile
+LOGIN_REDIRECT_URL = "/destinations/"  # redirect after log in
 PASSWORD_CHANGE_FORM_REDIRECT_URL= '/registration/password_change_done' # redirect changing password to password_change_done
 
 
