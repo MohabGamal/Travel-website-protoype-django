@@ -4,7 +4,7 @@ Summery:
                   -posts
                   -post_views
                   -topics as categories
-                  -comments
+                  -comments (@property to post)
                   -replies
                   -replies_to_reply
                   -mention&tags-emojis (using martor text editor)
@@ -18,7 +18,7 @@ Summery:
              -range filters(dates and prices)
              -countries as ctegories(names-abbreviations-flags)
              -destionations details
-             -destinations gallary (admin inline)
+             -destinations gallery (admin inline)
              -stars rating
              -booking
              -custom template tag to paginate filter results
