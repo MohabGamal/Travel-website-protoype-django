@@ -29,4 +29,4 @@ Summery:
              -log in with username or email (override backends.py)
              -social login
              )
-             
+ 4- Using Imgbot to compress media files
